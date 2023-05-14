@@ -1,14 +1,38 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  SectionList,
+  StatusBar,
+} from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const getSessoes = async () => {
+  const res = await fetch('http://127.0.0.1:3000/api/sessoes/Cinemark%20Praiamar');
+  const json = await res.json();
+  return json;
 }
+
+const DATA = getSessoes();
+
+const App = async () => (
+  <View style={styles.container}>
+    <SectionList
+      sections={DATA}
+      keyExtractor={(item, index) => item + index}
+      renderItem={({item}) => (
+        <View style={styles.item}>
+          <Text style={styles.title}>{item}</Text>
+        </View>
+      )}
+      renderSectionHeader={({section: {data}}) => (
+        <Text style={styles.header}>{data}</Text>
+      )}
+    />
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -18,3 +42,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;
