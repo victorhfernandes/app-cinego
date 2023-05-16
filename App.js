@@ -1,46 +1,70 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
+  ActivityIndicator,
+  FlatList,
+  SectionList,
   Text,
   View,
-  SafeAreaView,
-  SectionList,
   StatusBar,
-} from 'react-native';
+  Image,
+} from "react-native";
 
-const getSessoes = async () => {
-  const res = await fetch('http://127.0.0.1:3000/api/sessoes/Cinemark%20Praiamar');
-  const json = await res.json();
-  return json;
-}
+const App = () => {
+  const [isLoading, setLoading] = useState(true);
+  const [dados, setDados] = useState([]);
 
-const DATA = getSessoes();
+  const getMovies = async () => {
+    try {
+      const response = await fetch(
+        "http://192.168.15.182:3000/api/sessoes/Cinemark%20Praiamar"
+      );
+      const json = await response.json();
+      setDados(json);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const App = async () => (
-  <View style={styles.container}>
-    <SectionList
-      sections={DATA}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({item}) => (
-        <View style={styles.item}>
-          <Text style={styles.title}>{item}</Text>
+  useEffect(() => {
+    getMovies();
+  }, []);
+
+  return (
+    <View style={{ flex: 1, padding: 24 }}>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <View>
+          <FlatList
+            data={dados}
+            renderItem={({ item }) => (
+              <View>
+                <Text>{item.data}</Text>
+                <FlatList
+                  data={item.filmes}
+                  renderItem={({ item }) => (
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        style={{ width: 100, height: 150 }}
+                        source={{
+                          uri: item.poster,
+                        }}
+                      />
+                      <View>
+                        <Text>{item.nome}</Text>
+                      </View>
+                    </View>
+                  )}
+                />
+              </View>
+            )}
+          />
         </View>
       )}
-      renderSectionHeader={({section: {data}}) => (
-        <Text style={styles.header}>{data}</Text>
-      )}
-    />
-  </View>
-);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    </View>
+  );
+};
 
 export default App;
