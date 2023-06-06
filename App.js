@@ -16,7 +16,7 @@ const App = () => {
   const getMovies = async () => {
     try {
       const response = await fetch(
-        "http://192.168.15.182:3000/api/sessoes/Cinemark%20Praiamar"
+        "https://api-cinema-87eh.onrender.com/api/sessoes/Cinemark%20Praiamar"
       );
       const json = await response.json();
       setDados(json);
@@ -45,15 +45,36 @@ const App = () => {
                 <FlatList
                   data={item.filmes}
                   renderItem={({ item }) => (
-                    <View style={{ flexDirection: "row" }}>
+                    <View style={{ flexDirection: "row", padding: 10 }}>
                       <Image
                         style={{ width: 100, height: 150 }}
                         source={{
                           uri: item.poster,
                         }}
                       />
-                      <View>
+                      <View style={{ marginLeft: 5 }}>
                         <Text>{item.nome}</Text>
+                        <FlatList
+                          data={item.sessoes}
+                          renderItem={({ item }) => (
+                            <View>
+                              <Text>
+                                {item.tecnologia} {item.linguagem}
+                              </Text>
+                              <View>
+                                <FlatList
+                                  data={item.horarios}
+                                  horizontal
+                                  renderItem={({ item }) => (
+                                    <View>
+                                      <Text> {item} </Text>
+                                    </View>
+                                  )}
+                                />
+                              </View>
+                            </View>
+                          )}
+                        />
                       </View>
                     </View>
                   )}
