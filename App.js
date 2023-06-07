@@ -6,51 +6,55 @@ import {
   View,
   Image,
   StyleSheet,
+  SafeAreaView,
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
-const MovieScreen = ({ filmes }) => (
-  <FlatList
-    data={filmes}
-    renderItem={({ item }) => (
-      <View style={styles.movieContainer}>
-        <Image
-          style={styles.moviePoster}
-          source={{
-            uri: item.poster,
-          }}
-        />
-        <View style={styles.movieDetails}>
-          <Text style={styles.movieTitle}>{item.nome}</Text>
-          <FlatList
-            data={item.sessoes}
-            renderItem={({ item }) => (
-              <View>
-                <Text>
-                  {item.tecnologia} {item.linguagem}
-                </Text>
-                <View>
+const MovieScreen = ({ filmes }) => {
+  return (
+    <FlatList
+      data={filmes}
+      renderItem={({ item }) => (
+        <View style={styles.movieContainer}>
+          <Image
+            style={styles.moviePoster}
+            source={{
+              uri: item.poster,
+            }}
+          />
+          <View style={styles.movieDetails}>
+            <Text style={styles.movieTitle}>{item.nome}</Text>
+            <FlatList
+              data={item.sessoes}
+              renderItem={({ item }) => (
+                <View style={styles.showtimeContainer}>
+                  <Text style={styles.showtimeText}>
+                    {item.tecnologia} {item.linguagem}
+                  </Text>
                   <FlatList
                     data={item.horarios}
                     horizontal
                     renderItem={({ item }) => (
-                      <View style={styles.showtimeContainer}>
-                        <Text style={styles.showtimeText}>{item}</Text>
+                      <View style={styles.timeContainer}>
+                        <Text style={styles.timeText}>{item}</Text>
                       </View>
                     )}
+                    keyExtractor={(item, index) => index.toString()}
                   />
                 </View>
-              </View>
-            )}
-          />
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
         </View>
-      </View>
-    )}
-  />
-);
+      )}
+      keyExtractor={(item, index) => index.toString()}
+    />
+  );
+};
 
 const App = () => {
   const [isLoading, setLoading] = useState(true);
@@ -75,54 +79,79 @@ const App = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <NavigationContainer>
-          <Tab.Navigator>
+          <Tab.Navigator
+            tabBarOptions={{
+              activeTintColor: "#1f88a7",
+              inactiveTintColor: "#b4b4b4",
+              labelStyle: { fontSize: 14, fontWeight: "bold" },
+            }}
+          >
             {dados.map((item, index) => (
               <Tab.Screen
                 key={index}
                 name={item.data ? item.data.toString() : `Tab${index}`}
-                component={() => <MovieScreen filmes={item.filmes} />}
-              />
+              >
+                {() => <MovieScreen filmes={item.filmes} />}
+              </Tab.Screen>
             ))}
           </Tab.Navigator>
         </NavigationContainer>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f5f5f5",
   },
   movieContainer: {
     flexDirection: "row",
     padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e5e5e5",
   },
   moviePoster: {
     width: 100,
     height: 150,
+    borderRadius: 8,
   },
   movieDetails: {
-    marginLeft: 5,
+    flex: 1,
+    marginLeft: 10,
+    justifyContent: "center",
   },
   movieTitle: {
     fontSize: 16,
     fontWeight: "bold",
+    marginBottom: 10,
   },
   showtimeContainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 4,
-    marginRight: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
   },
   showtimeText: {
     fontSize: 12,
+    marginRight: 8,
+    color: "#666",
+  },
+  timeContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: "#1f88a7",
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  timeText: {
+    fontSize: 12,
+    color: "#fff",
   },
 });
 
