@@ -13,13 +13,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
-const cinema = "Cine Flix Miramar";
-//const cinema = "Cinemark Praiamar";
-//const cinema = "Cine flix Miramar";
-//const cinema = "Cine Roxy 5 Gonzaga";
-//const cinema = "Cine Roxy 6 Brisamar";
-//const cinema = "Cine Roxy 3 Parque Anilinas";
-//const cinema = "Cine 3 Ferry Boat's Plaza";
+const cinema = "Cinemark Praiamar"; //Santos
+//const cinema = "Cine flix Miramar"; //Santos
+//const cinema = "Cine Roxy 5 Gonzaga"; //Santos
+//const cinema = "Cine Roxy 6 Brisamar"; //São Vicente
+//const cinema = "Cine Roxy 3 Parque Anilinas"; //Cubatão
+//const cinema = "Cine 3 Ferry Boat's Plaza"; //Guarujá
+//const cinema = "Espaço Itaú de Cinema - Augusta"; //São Paulo
+//const cinema = "Petra Belas Artes"; //São Paulo
 
 const MovieScreen = ({ filmes }) => {
   return (
