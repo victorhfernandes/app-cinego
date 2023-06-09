@@ -13,6 +13,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
+const cinema = "Cine Flix Miramar";
 
 const MovieScreen = ({ filmes }) => {
   return (
@@ -64,7 +65,7 @@ const App = () => {
   const getMovies = async () => {
     try {
       const response = await fetch(
-        "https://api-cinema-87eh.onrender.com/api/sessoes/Cinemark%20Praiamar"
+        `https://api-cinema-87eh.onrender.com/api/sessoes/${cinema}`
       );
       const json = await response.json();
       setDados(json);
@@ -107,7 +108,11 @@ const App = () => {
             {dados.map((item, index) => (
               <Tab.Screen
                 key={index}
-                name={item.data ? item.data.toString() : `Tab${index}`}
+                name={
+                  item.data + " - " + cinema
+                    ? item.data.toString() + " - " + cinema
+                    : `Tab${index}`
+                }
               >
                 {() => <MovieScreen filmes={item.filmes} />}
               </Tab.Screen>
