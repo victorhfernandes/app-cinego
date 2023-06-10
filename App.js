@@ -90,7 +90,9 @@ const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? (
-        <ActivityIndicator />
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="#000" />
+      </View>
       ) : (
         <NavigationContainer>
           <Tab.Navigator
@@ -135,6 +137,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
   },
   movieContainer: {
     flexDirection: "row",
