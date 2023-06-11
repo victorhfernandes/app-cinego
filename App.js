@@ -6,21 +6,23 @@ import {
   View,
   Image,
   StyleSheet,
+  ScrollView,
   SafeAreaView,
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
+import { SelectList } from "react-native-dropdown-select-list";
 import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
-const cinema = "Cinemark Praiamar"; //Santos
-//const cinema = "Cine flix Miramar"; //Santos
-//const cinema = "Cine Roxy 5 Gonzaga"; //Santos
-//const cinema = "Cine Roxy 6 Brisamar"; //São Vicente
-//const cinema = "Cine Roxy 3 Parque Anilinas"; //Cubatão
-//const cinema = "Cine 3 Ferry Boat's Plaza"; //Guarujá
-//const cinema = "Espaço Itaú de Cinema - Augusta"; //São Paulo
-//const cinema = "Petra Belas Artes"; //São Paulo
+//const cinemas = "Cinemark Praiamar"; //Santos
+//const cinemas = "Cine flix Miramar"; //Santos
+//const cinemas = "Cine Roxy 5 Gonzaga"; //Santos
+//const cinemas = "Cine Roxy 6 Brisamar"; //São Vicente
+//const cinemas = "Cine Roxy 3 Parque Anilinas"; //Cubatão
+//const cinemas = "Cine 3 Ferry Boat's Plaza"; //Guarujá
+//const cinemas = "Espaço Itaú de Cinema - Augusta"; //São Paulo
+const cinemas = "Petra Belas Artes"; //São Paulo
 
 const MovieScreen = ({ filmes }) => {
   return (
@@ -68,6 +70,24 @@ const MovieScreen = ({ filmes }) => {
 const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [dados, setDados] = useState([]);
+  const [cinema, setCinema] = useState("Cinemark Praiamar");
+
+  const data = [
+    { key: "Cinemark Praiamar", value: "Cinemark Praiamar" },
+    { key: "Cine Flix Miramar", value: "Cine Flix Miramar" },
+    { key: "Cine Roxy 5 Gonzaga", value: "Cine Roxy 5 Gonzaga" },
+    { key: "Cine Roxy 6 Brisamar", value: "Cine Roxy 6 Brisamar" },
+    {
+      key: "Cine Roxy 3 Parque Anilinas",
+      value: "Cine Roxy 3 Parque Anilinas",
+    },
+    { key: "Cine 3 Ferry Boat's Plaza", value: "Cine 3 Ferry Boat's Plaza" },
+    {
+      key: "Espaço Itaú de Cinema - Augusta",
+      value: "Espaço Itaú de Cinema - Augusta",
+    },
+    { key: "Petra Belas Artes", value: "Petra Belas Artes" },
+  ];
 
   const getMovies = async () => {
     try {
@@ -84,15 +104,16 @@ const App = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     getMovies();
-  }, []);
+  }, [cinema]);
 
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#000" />
-      </View>
+        </View>
       ) : (
         <NavigationContainer>
           <Tab.Navigator
@@ -117,13 +138,18 @@ const App = () => {
             {dados.map((item, index) => (
               <Tab.Screen
                 key={index}
-                name={
-                  item.data + " - " + cinema
-                    ? item.data.toString() + " - " + cinema
-                    : `Tab${index}`
-                }
+                name={item.data ? item.data.toString() : `Tab${index}`}
               >
-                {() => <MovieScreen filmes={item.filmes} />}
+                {() => (
+                  <View>
+                    <SelectList
+                      setSelected={setCinema}
+                      data={data}
+                      placeholder={cinema}
+                    />
+                    <MovieScreen filmes={item.filmes} />
+                  </View>
+                )}
               </Tab.Screen>
             ))}
           </Tab.Navigator>
@@ -140,7 +166,7 @@ const styles = StyleSheet.create({
   },
   loading: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   movieContainer: {
     flexDirection: "row",
@@ -162,6 +188,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
+  },
+  cinemaTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 10,
   },
   showtimeContainer: {
     flexDirection: "row",
