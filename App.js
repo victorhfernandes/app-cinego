@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  StatusBar,
   Text,
   View,
   Image,
   StyleSheet,
-  ScrollView,
   SafeAreaView,
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -110,29 +110,51 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{ paddingTop: StatusBar.currentHeight }} />
       {isLoading ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#000" />
+          <Image
+            style={styles.tinyLogo}
+            source={require("./assets/adaptive-icon.png")}
+          />
+          <ActivityIndicator size="large" color="#6554AF" />
         </View>
       ) : (
-        <NavigationContainer>
+        <NavigationContainer
+          theme={{
+            colors: {
+              background: "#2B2730",
+            },
+          }}
+        >
+          <SelectList
+            setSelected={setCinema}
+            data={data}
+            placeholder={cinema}
+            search={false}
+            inputStyles={{ color: "#F0EEED", fontWeight: "bold" }}
+            dropdownTextStyles={{ color: "#F0EEED" }}
+          />
           <Tab.Navigator
-            screenOptions={({ route }) => ({
+            screenOptions={{
               tabBarIcon: ({ color, size }) => {
                 let iconName;
-                if (route.name === "Home") {
-                  iconName = "home-outline";
-                } else if (route.name === "Profile") {
-                  iconName = "person-outline";
-                }
-
                 return <Ionicons name={iconName} size={size} color={color} />;
               },
-            })}
-            tabBarOptions={{
-              activeTintColor: "#1f88a7",
-              inactiveTintColor: "#b4b4b4",
-              labelStyle: { fontSize: 14, fontWeight: "bold" },
+              tabBarActiveTintColor: "#6554AF",
+              tabBarInactiveTintColor: "#F0EEED",
+              tabBarLabelStyle: {
+                fontSize: 14,
+                fontWeight: "bold",
+              },
+              tabBarStyle: [
+                {
+                  display: "flex",
+                  backgroundColor: "#2B2730",
+                },
+                null,
+              ],
+              headerShown: false,
             }}
           >
             {dados.map((item, index) => (
@@ -140,16 +162,7 @@ const App = () => {
                 key={index}
                 name={item.data ? item.data.toString() : `Tab${index}`}
               >
-                {() => (
-                  <View>
-                    <SelectList
-                      setSelected={setCinema}
-                      data={data}
-                      placeholder={cinema}
-                    />
-                    <MovieScreen filmes={item.filmes} />
-                  </View>
-                )}
+                {() => <MovieScreen filmes={item.filmes} />}
               </Tab.Screen>
             ))}
           </Tab.Navigator>
@@ -162,17 +175,25 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#2B2730",
   },
   loading: {
+    backgroundColor: "#2B2730",
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+  },
+  tinyLogo: {
+    width: 125,
+    height: 125,
+    marginBottom: 15,
   },
   movieContainer: {
     flexDirection: "row",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e5e5",
+    borderBottomColor: "#2B2730",
+    backgroundColor: "#2B2730",
   },
   moviePoster: {
     width: 100,
@@ -188,6 +209,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#F0EEED",
   },
   cinemaTitle: {
     fontSize: 20,
@@ -203,18 +225,18 @@ const styles = StyleSheet.create({
   showtimeText: {
     fontSize: 12,
     marginRight: 8,
-    color: "#666",
+    color: "#f0eeedd8",
   },
   timeContainer: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: "#1f88a7",
+    backgroundColor: "#6554AF",
     borderRadius: 20,
     marginRight: 8,
   },
   timeText: {
     fontSize: 12,
-    color: "#fff",
+    color: "#F0EEED",
   },
 });
 
