@@ -11,6 +11,7 @@ npm-debug.*
 web-build/
 App - Copia.js
 eas.json
+.vscode
 
 # macOS
 .DS_Store

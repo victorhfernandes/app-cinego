@@ -71,26 +71,16 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [dados, setDados] = useState([]);
   const [cinema, setCinema] = useState("Cinemark Praiamar");
-
-  const data = [
-    { key: "Cinemark Praiamar", value: "Cinemark Praiamar" },
-    { key: "Cine Flix Miramar", value: "Cine Flix Miramar" },
-    { key: "Cine Roxy 5 Gonzaga", value: "Cine Roxy 5 Gonzaga" },
-    { key: "Cine Roxy 6 Brisamar", value: "Cine Roxy 6 Brisamar" },
-    {
-      key: "Cine Roxy 3 Parque Anilinas",
-      value: "Cine Roxy 3 Parque Anilinas",
-    },
-    { key: "Cine 3 Ferry Boat's Plaza", value: "Cine 3 Ferry Boat's Plaza" },
-    {
-      key: "Espaço Itaú de Cinema - Augusta",
-      value: "Espaço Itaú de Cinema - Augusta",
-    },
-    { key: "Petra Belas Artes", value: "Petra Belas Artes" },
-  ];
+  const [data, setData] = useState([]);
 
   const getMovies = async () => {
     try {
+      const resCine = await fetch(
+        'https://api-cinema-87eh.onrender.com/api/cinemas'
+      );
+      const jsonCine = await resCine.json();
+      setData(jsonCine);
+
       const response = await fetch(
         `https://api-cinema-87eh.onrender.com/api/sessoes/${cinema}`
       );
