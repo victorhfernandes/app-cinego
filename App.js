@@ -22,7 +22,7 @@ const Tab = createBottomTabNavigator();
 //const cinemas = "Cine Roxy 3 Parque Anilinas"; //Cubatão
 //const cinemas = "Cine 3 Ferry Boat's Plaza"; //Guarujá
 //const cinemas = "Espaço Itaú de Cinema - Augusta"; //São Paulo
-const cinemas = "Petra Belas Artes"; //São Paulo
+//const cinemas = "Petra Belas Artes"; //São Paulo
 
 const MovieScreen = ({ filmes }) => {
   return (
@@ -76,7 +76,7 @@ const App = () => {
   const getMovies = async () => {
     try {
       const resCine = await fetch(
-        'https://api-cinema-87eh.onrender.com/api/cinemas'
+        "https://api-cinema-87eh.onrender.com/api/cinemas"
       );
       const jsonCine = await resCine.json();
       setData(jsonCine);
